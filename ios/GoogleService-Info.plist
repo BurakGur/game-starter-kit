@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>154774090513-mrtj8lnqahvs8a0gnb7id0j6fsf39bkh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.154774090513-mrtj8lnqahvs8a0gnb7id0j6fsf39bkh</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBJqquhQ7j6JGdNoCo3lxHQq8enGvbfCdc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>154774090513</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.starterkit</string>
+	<key>PROJECT_ID</key>
+	<string>game-1a8d4</string>
+	<key>STORAGE_BUCKET</key>
+	<string>game-1a8d4.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:154774090513:ios:b1ffd083f4ed3bb6efd2b0</string>
+</dict>
+</plist>
