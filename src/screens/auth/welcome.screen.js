@@ -6,16 +6,21 @@ import {useRecoilValue} from 'recoil';
 import {themeState} from '@/store/selectors';
 import t from '@locale';
 import {getCollection} from '@utils/firebase';
+import {redis} from '@utils/redis';
 
 const WelcomeScreen = ({navigation}) => {
   const theme = useRecoilValue(themeState);
 
   useEffect(() => {
-    getCollection('Users')
-      .get()
-      .then(snapshot => {
+    const init = async () => {
+      getCollection('Users').then(snapshot => {
         console.log(snapshot.docs[0].data());
       });
+      await redis.set('key', 'value');
+      let data = await redis.get('foo');
+      console.log(data);
+    };
+    init();
   }, []);
 
   return (
