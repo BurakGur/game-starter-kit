@@ -9,9 +9,10 @@ import {getEmailForLogoutUser, saveUser} from '@utils/user';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {userState} from '@/store/atoms';
 import {AppText} from '@/components';
-import {StatusBar} from 'react-native';
-import {themeState} from '@/store/selectors';
-import {collection} from '@/utils/firebase';
+import {Platform, StatusBar} from 'react-native';
+import {themeState} from '@store/selectors';
+import {collection} from '@utils/firebase';
+import {redis} from '@utils/redis';
 
 const LoginScreen = ({navigation}) => {
   const [, setUser] = useRecoilState(userState);
@@ -44,9 +45,26 @@ const LoginScreen = ({navigation}) => {
     collection('Users')
       .where('username', '==', data.username)
       .get()
-      .then(snapshot => {
+      .then(async snapshot => {
         if (snapshot.empty) {
-          console.log('bunu kullanabilirsin.');
+          await redis.set(data.username, 0);
+          const user = {
+            username: data.username,
+            os: Platform.OS,
+            version: Platform.Version,
+            createdDate: new Date(),
+          };
+          console.log(user);
+          collection('Users')
+            .add(user)
+            .then(async () => {
+              setUser(user);
+              await saveUser(user);
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'ArticleList'}],
+              });
+            });
         } else {
           console.log('no no no');
         }
