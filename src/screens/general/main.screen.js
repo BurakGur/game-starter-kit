@@ -12,15 +12,13 @@ const MainScreen = ({navigation}) => {
 
   useEffect(() => {
     const initApp = async () => {
-      const token = await AsyncStorage.getItem('token');
       const savedUser = await AsyncStorage.getItem('user');
       const theme = await getSavedTheme();
-
       setCustomize({theme});
 
       let routeName = 'ArticleList';
 
-      if (!token) {
+      if (!savedUser) {
         routeName = 'Welcome';
       } else {
         setUser(JSON.parse(savedUser));

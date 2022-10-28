@@ -8,12 +8,13 @@ export default {
   _formElement: {
     email: 'E-posta',
     password: 'Şifre',
+    username: 'Kullanıcı Adı',
   },
   _welcomeScreen: {
     getStarted: 'Şimdi Başla',
   },
   _loginScreen: {
-    welcome: "fabula'ya hoş geldin",
+    welcome: "oyun'a hoş geldin",
     login: 'Giriş Yap',
     forgotPassword: 'Şifremi Unuttum',
   },

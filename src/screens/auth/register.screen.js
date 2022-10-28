@@ -11,6 +11,7 @@ import {userState} from '@/store/atoms';
 import {AppText} from '@/components';
 import {StatusBar} from 'react-native';
 import {themeState} from '@/store/selectors';
+import {collection} from '@/utils/firebase';
 
 const LoginScreen = ({navigation}) => {
   const [, setUser] = useRecoilState(userState);
@@ -40,6 +41,17 @@ const LoginScreen = ({navigation}) => {
   });
 
   const onSubmit = async data => {
+    collection('Users')
+      .where('username', '==', data.username)
+      .get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('bunu kullanabilirsin.');
+        } else {
+          console.log('no no no');
+        }
+      });
+    return;
     await api.auth
       .login(data.email, data.password)
       .then(async response => {
@@ -79,29 +91,18 @@ const LoginScreen = ({navigation}) => {
         Aliquip adipisicing velit dolor quis labore adipisicing minim ad commodo id mollit laboris aliqua.
       </AppText>
       <AppInput
-        error={errors.email}
-        control={control}
-        rules={{required: true, pattern: emailPattern}}
-        name="email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        label={t('_formElement.email')}
-        placeholder="john@fabula.com"
-      />
-      <AppInput
-        error={errors.password}
+        error={errors.username}
         control={control}
         rules={{required: true, minLength: 6}}
-        isSecureText={true}
-        name="password"
-        label={t('_formElement.password')}
-        placeholder="********"
+        name="username"
+        autoCapitalize="none"
+        label={t('_formElement.username')}
+        placeholder="Nebukadnezar"
       />
       <AppBox justifyContent="flex-end" alignItems="flex-end" marginBottom={theme.spaces.x14}>
         <AppText>{t('_loginScreen.forgotPassword')}</AppText>
       </AppBox>
       <AppButton onPress={handleSubmit(onSubmit)} title="Giriş Yap" />
-      <AppText marginTop={theme.spaces.x15}>Hesabınız yok mu? Üye Ol</AppText>
     </AuthLayout>
   );
 };

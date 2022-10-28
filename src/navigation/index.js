@@ -5,7 +5,7 @@ import {ThemeProvider} from 'styled-components';
 import {useRecoilValue} from 'recoil';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {customizeState} from '@store/atoms';
-import {Login, Welcome} from '@screens/auth';
+import {Register, Welcome} from '@screens/auth';
 import {ArticleDetail, ArticleList} from '@screens/article';
 import {Menu} from '@screens/shared/';
 import {Main} from '@screens/general';
@@ -39,8 +39,8 @@ const RouteNavigation = () => {
               }}
             />
             <Stack.Screen
-              name="Login"
-              component={Login}
+              name="Register"
+              component={Register}
               options={{
                 headerShown: false,
               }}

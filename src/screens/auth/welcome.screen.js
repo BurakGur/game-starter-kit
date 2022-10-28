@@ -7,11 +7,13 @@ import {themeState} from '@/store/selectors';
 import t from '@locale';
 import {getCollection} from '@utils/firebase';
 import {redis} from '@utils/redis';
+import {Platform} from 'react-native';
 
 const WelcomeScreen = ({navigation}) => {
   const theme = useRecoilValue(themeState);
 
   useEffect(() => {
+    console.log(Platform);
     const init = async () => {
       getCollection('Users').then(snapshot => {
         console.log(snapshot.docs[0].data());
@@ -47,7 +49,7 @@ const WelcomeScreen = ({navigation}) => {
               Aliquip adipisicing velit dolor quis labore adipisicing minim ad commodo id mollit laboris aliqua.
             </AppText>
           </AppBox>
-          <AppButton onPress={() => navigation.navigate('Login')} title={t('_welcomeScreen.getStarted')} />
+          <AppButton onPress={() => navigation.navigate('Register')} title={t('_welcomeScreen.getStarted')} />
         </AuthLayout>
       </AppBackgroundImage>
     </AppBox>
