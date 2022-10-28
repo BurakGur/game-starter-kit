@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {Controller} from 'react-hook-form';
-import {FormErrorMessage} from '@components';
+import {FormErrorMessage, AppText, AppIf} from '@components';
 import {InputComponent, LabelComponent, InputContainer} from './AppInput.style';
 import {useRecoilValue} from 'recoil';
 import {themeState} from '@store/selectors';
+import {usernameFormatter} from '@utils/username';
 
 const AppInput = ({
   control,
@@ -16,6 +17,7 @@ const AppInput = ({
   autoCorrect = false,
   isSecureText = false,
   rules = {},
+  isUsernameInput = false,
 }) => {
   const theme = useRecoilValue(themeState);
   const [isFocused, setIsFocused] = useState(false);
@@ -50,6 +52,9 @@ const AppInput = ({
             autoCorrect={autoCorrect}
           />
           <FormErrorMessage label={label} error={error} />
+          <AppIf condition={isUsernameInput}>
+            <AppText marginTop={theme.spaces.x2}>Kullanıcı Adı: {usernameFormatter(value)}</AppText>
+          </AppIf>
         </InputContainer>
       )}
       name={name}

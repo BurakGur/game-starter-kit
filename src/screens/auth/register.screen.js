@@ -16,30 +16,15 @@ import {redis} from '@utils/redis';
 
 const LoginScreen = ({navigation}) => {
   const [, setUser] = useRecoilState(userState);
+  const [data, setData] = useState();
   const theme = useRecoilValue(themeState);
-
-  useEffect(() => {
-    const setEmail = async () => {
-      const email = await getEmailForLogoutUser();
-      if (email) {
-        reset({
-          email: email,
-        });
-      }
-    };
-    setEmail();
-  }, [reset]);
 
   const {
     control,
     handleSubmit,
     reset,
     formState: {errors},
-  } = useForm({
-    defaultValues: {
-      email: '',
-    },
-  });
+  } = useForm({});
 
   const onSubmit = async data => {
     collection('Users')
@@ -54,7 +39,6 @@ const LoginScreen = ({navigation}) => {
             version: Platform.Version,
             createdDate: new Date(),
           };
-          console.log(user);
           collection('Users')
             .add(user)
             .then(async () => {
@@ -69,19 +53,10 @@ const LoginScreen = ({navigation}) => {
           console.log('no no no');
         }
       });
-    return;
-    await api.auth
-      .login(data.email, data.password)
-      .then(async response => {
-        const user = response.data.user;
-        setUser(user);
-        await saveUser(user);
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'ArticleList'}],
-        });
-      })
-      .catch(error => console.log('error', error));
+  };
+
+  const onChange = data => {
+    console.log(data);
   };
 
   StatusBar.setBarStyle('dark-content', true);
@@ -116,11 +91,14 @@ const LoginScreen = ({navigation}) => {
         autoCapitalize="none"
         label={t('_formElement.username')}
         placeholder="Nebukadnezar"
+        onChangeText={onChange}
+        isUsernameInput={true}
       />
+      <AppText>{data}</AppText>
       <AppBox justifyContent="flex-end" alignItems="flex-end" marginBottom={theme.spaces.x14}>
         <AppText>{t('_loginScreen.forgotPassword')}</AppText>
       </AppBox>
-      <AppButton onPress={handleSubmit(onSubmit)} title="Giriş Yap" />
+      <AppButton onPress={handleSubmit(data => setData(JSON.stringify(data)))} title="Giriş Yap" />
     </AuthLayout>
   );
 };

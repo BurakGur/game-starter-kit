@@ -10,7 +10,7 @@ export const saveUser = async user => {
 
 export const exitUser = async () => {
   try {
-    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('user');
   } catch (error) {
     console.log(error);
   }

@@ -7,3 +7,4 @@ export {default as AppText} from './AppText/AppText.component';
 export {default as AppBackgroundImage} from './AppBackgroundImage/AppBackgroundImage.component';
 export {default as ArticleCard} from './ArticleCard/ArticleCard.component';
 export {default as MenuListItem} from './MenuListItem/MenuListItem.component';
+export {default as AppIf} from './AppIf/AppIf.component';
