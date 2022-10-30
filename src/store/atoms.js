@@ -11,8 +11,10 @@ export const customizeState = atom({
 export const userState = atom({
   key: 'User',
   default: {
-    name: '',
-    email: '',
-    _id: '',
+    username: '',
+    os: '',
+    version: '',
+    createdDate: '',
+    score: 0,
   },
 });

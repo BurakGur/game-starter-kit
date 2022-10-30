@@ -44,7 +44,7 @@ const LoginScreen = ({navigation}) => {
               await saveUser(user);
               navigation.reset({
                 index: 0,
-                routes: [{name: 'GameStart'}],
+                routes: [{name: 'StartGame'}],
               });
             });
         } else {

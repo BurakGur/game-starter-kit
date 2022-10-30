@@ -16,7 +16,7 @@ const MainScreen = ({navigation}) => {
       const theme = await getSavedTheme();
       setCustomize({theme});
 
-      let routeName = 'GameStart';
+      let routeName = 'StartGame';
 
       if (!savedUser) {
         routeName = 'Welcome';

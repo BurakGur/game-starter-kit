@@ -31,7 +31,7 @@ const WelcomeScreen = ({navigation}) => {
         <AuthLayout justifyContent="flex-end" alignItems="center">
           <AppBox marginBottom={theme.spaces.x4} flex={1}>
             <AppText fontSize={theme.fontSize.title} color={theme.colors.text_06} fontFamily={theme.fontFamily.bold}>
-              fabula
+              game starter kit
             </AppText>
             <AppText fontSize={theme.fontSize.title} color={theme.colors.text_07} fontFamily={theme.fontFamily.bold}>
               .
