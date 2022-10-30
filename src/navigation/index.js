@@ -95,6 +95,8 @@ const RouteNavigation = () => {
                     <Text>Menü</Text>
                   </TouchableOpacity>
                 ),
+                headerLeft: () => <></>,
+                gestureEnabled: false,
               })}
             />
           </Stack.Navigator>

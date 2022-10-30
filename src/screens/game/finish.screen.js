@@ -27,6 +27,15 @@ const FinishGameScreen = ({navigation, route}) => {
     <GameLayout>
       <AppText>Bitirilen Skor: {finishScore}</AppText>
       <AppText>En yüksek skor: {highScore}</AppText>
+      <AppButton
+        title="Yeniden Oyna"
+        onPress={() =>
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'PlayGame'}],
+          })
+        }></AppButton>
+      <AppButton title="Devam Et" onPress={() => navigation.navigate('PlayGame')}></AppButton>
     </GameLayout>
   );
 };
