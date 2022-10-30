@@ -14,7 +14,7 @@ const Downcoder = {
   },
 };
 
-function downcode(slug) {
+function downcode(slug = '') {
   Downcoder.Initialize();
   return slug.replace(Downcoder.regex, function (m) {
     return Downcoder.map[m];

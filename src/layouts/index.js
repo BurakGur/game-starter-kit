@@ -1,2 +1,2 @@
 export * from './auth.layout';
-export * from './articleList.layout';
+export * from './game.layout';

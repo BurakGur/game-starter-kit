@@ -1,22 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {useForm} from 'react-hook-form';
-import api from '@services/api';
 import {AppInput, AppBox, AppButton} from '@components';
 import {AuthLayout} from '@layouts';
 import t from '@locale';
-import {emailPattern} from '@constants/patterns';
-import {getEmailForLogoutUser, saveUser} from '@utils/user';
+import {saveUser} from '@utils/user';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {userState} from '@/store/atoms';
 import {AppText} from '@/components';
-import {Platform, StatusBar} from 'react-native';
+import {Alert, Platform, StatusBar} from 'react-native';
 import {themeState} from '@store/selectors';
 import {collection} from '@utils/firebase';
 import {redis} from '@utils/redis';
 
 const LoginScreen = ({navigation}) => {
   const [, setUser] = useRecoilState(userState);
-  const [data, setData] = useState();
   const theme = useRecoilValue(themeState);
 
   const {
@@ -38,6 +35,7 @@ const LoginScreen = ({navigation}) => {
             os: Platform.OS,
             version: Platform.Version,
             createdDate: new Date(),
+            score: 0,
           };
           collection('Users')
             .add(user)
@@ -46,17 +44,15 @@ const LoginScreen = ({navigation}) => {
               await saveUser(user);
               navigation.reset({
                 index: 0,
-                routes: [{name: 'ArticleList'}],
+                routes: [{name: 'GameStart'}],
               });
             });
         } else {
-          console.log('no no no');
+          Alert.alert('Geçersiz Kullanıcı Adı', 'Bu kullanıcı adı başka bir kullanıcı tarafından kullanılmaktadır.', [
+            {text: 'Tamam', onPress: () => console.log('OK Pressed')},
+          ]);
         }
       });
-  };
-
-  const onChange = data => {
-    console.log(data);
   };
 
   StatusBar.setBarStyle('dark-content', true);
@@ -80,7 +76,6 @@ const LoginScreen = ({navigation}) => {
         lineHeight={theme.lineHeight.x20}
         marginBottom={theme.spaces.x6}
         width="auto">
-        {' '}
         Aliquip adipisicing velit dolor quis labore adipisicing minim ad commodo id mollit laboris aliqua.
       </AppText>
       <AppInput
@@ -91,14 +86,12 @@ const LoginScreen = ({navigation}) => {
         autoCapitalize="none"
         label={t('_formElement.username')}
         placeholder="Nebukadnezar"
-        onChangeText={onChange}
         isUsernameInput={true}
       />
-      <AppText>{data}</AppText>
       <AppBox justifyContent="flex-end" alignItems="flex-end" marginBottom={theme.spaces.x14}>
         <AppText>{t('_loginScreen.forgotPassword')}</AppText>
       </AppBox>
-      <AppButton onPress={handleSubmit(data => setData(JSON.stringify(data)))} title="Giriş Yap" />
+      <AppButton onPress={handleSubmit(onSubmit)} title="Giriş Yap" />
     </AuthLayout>
   );
 };

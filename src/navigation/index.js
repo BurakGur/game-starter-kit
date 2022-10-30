@@ -6,7 +6,7 @@ import {useRecoilValue} from 'recoil';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {customizeState} from '@store/atoms';
 import {Register, Welcome} from '@screens/auth';
-import {ArticleDetail, ArticleList} from '@screens/article';
+import {ArticleDetail, GameStart} from '@/screens/game';
 import {Menu} from '@screens/shared/';
 import {Main} from '@screens/general';
 import {Text, TouchableOpacity} from 'react-native';
@@ -59,8 +59,8 @@ const RouteNavigation = () => {
             />
             <Stack.Screen name="MyProfile" component={MyProfile} />
             <Stack.Screen
-              name="ArticleList"
-              component={ArticleList}
+              name="GameStart"
+              component={GameStart}
               options={({navigation}) => ({
                 headerRight: () => (
                   <TouchableOpacity onPress={() => navigation.navigate('Menu')}>

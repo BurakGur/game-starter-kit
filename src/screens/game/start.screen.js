@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {ArticleListLayout} from '@layouts';
+import {GameLayout} from '@layouts';
 import {Text, TouchableOpacity} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {userState} from '@/store/atoms';
 import api from '@services/api';
 import styled from 'styled-components/native';
 import {themeState} from '@/store/selectors';
-import {ArticleCard} from '@/components';
+import {AppButton, AppText, ArticleCard} from '@/components';
 
-const ArticleListScreen = ({navigation}) => {
+const GameStartScreen = ({navigation}) => {
   const user = useRecoilValue(userState);
   const theme = useRecoilValue(themeState);
   const [articles, setArticles] = useState([]);
@@ -28,22 +28,12 @@ const ArticleListScreen = ({navigation}) => {
   }, []);
 
   return (
-    <ArticleListLayout>
-      {articles.map(article => (
-        <ArticleCard
-          onPress={() =>
-            navigation.navigate('ArticleDetail', {
-              articleId: article._id,
-            })
-          }
-          title={article.title}
-          description={article.description}
-          createdDate={article.createdAt}
-          key={article._id}
-        />
-      ))}
-    </ArticleListLayout>
+    <GameLayout>
+      <AppText>Username: {user.username}</AppText>
+      <AppText>Score: {user.score}</AppText>
+      <AppButton onPress={() => navigation.navigate('PlayScreen')} title="Oyuna Başla" />
+    </GameLayout>
   );
 };
 
-export default ArticleListScreen;
+export default GameStartScreen;
