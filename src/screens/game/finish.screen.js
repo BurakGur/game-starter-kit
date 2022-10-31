@@ -9,14 +9,10 @@ import {themeState} from '@/store/selectors';
 import {AppButton, AppText, ArticleCard} from '@/components';
 import {redis} from '@utils/redis';
 import {updateUserScore} from '@utils/user';
-import {RewardedAd, RewardedAdEventType, TestIds} from 'react-native-google-mobile-ads';
+import {RewardedAd, RewardedAdEventType} from 'react-native-google-mobile-ads';
+import {adsConfig, rewardedId} from '@utils/ads';
 
-const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
-
-const rewarded = RewardedAd.createForAdRequest(adUnitId, {
-  requestNonPersonalizedAdsOnly: true,
-  keywords: ['fashion', 'clothing'],
-});
+const rewarded = RewardedAd.createForAdRequest(rewardedId, adsConfig);
 
 const FinishGameScreen = ({navigation, route}) => {
   const user = useRecoilValue(userState);
@@ -39,17 +35,14 @@ const FinishGameScreen = ({navigation, route}) => {
       navigation.navigate('PlayGame');
     });
 
-    // Start loading the rewarded ad straight away
     rewarded.load();
 
-    // Unsubscribe from events on unmount
     return () => {
       unsubscribeLoaded();
       unsubscribeEarned();
     };
   }, []);
 
-  // No advert ready to show yet
   if (!loaded) {
     rewarded.load();
     return (
