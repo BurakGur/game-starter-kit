@@ -13,7 +13,7 @@ import {collection} from '@utils/firebase';
 import {redis} from '@utils/redis';
 
 const LoginScreen = ({navigation}) => {
-  const [, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
   const theme = useRecoilValue(themeState);
 
   const {
@@ -24,31 +24,28 @@ const LoginScreen = ({navigation}) => {
   } = useForm({});
 
   const onSubmit = async data => {
-    collection('Users')
-      .where('username', '==', data.username)
+    console.log('data', data);
+    collection('Groups')
+      .where('groupname', '==', data.groupname)
       .get()
       .then(async snapshot => {
+        console.log('helooo', snapshot);
         if (snapshot.empty) {
-          await redis.set(data.username, 0);
-          const user = {
-            username: data.username,
-            os: Platform.OS,
-            version: Platform.Version,
+          const groupData = {
+            groupname: data.groupname,
+            user: user.username,
             createdDate: new Date(),
-            score: 0,
           };
-          collection('Users')
-            .add(user)
+          collection('Groups')
+            .add(groupData)
             .then(async () => {
-              setUser(user);
-              await saveUser(user);
               navigation.reset({
                 index: 0,
-                routes: [{name: 'StartGame'}],
+                routes: [{name: 'GroupSettings'}],
               });
             });
         } else {
-          Alert.alert('Geçersiz Kullanıcı Adı', 'Bu kullanıcı adı başka bir kullanıcı tarafından kullanılmaktadır.', [
+          Alert.alert('Geçersiz Grup Adı', 'Bu grup adı başka bir grup tarafından kullanılmaktadır.', [
             {text: 'Tamam', onPress: () => console.log('OK Pressed')},
           ]);
         }
@@ -65,26 +62,15 @@ const LoginScreen = ({navigation}) => {
         fontFamily={theme.fontFamily.medium}
         marginBottom={theme.spaces.x2}
         marginTop={theme.spaces.x4}>
-        {t('_loginScreen.welcome')}
-      </AppText>
-      <AppText
-        fontSize={theme.fontSize.small}
-        color={theme.colors.text_03}
-        textAlign="center"
-        marginRight={theme.spaces.x5}
-        marginLeft={theme.spaces.x5}
-        lineHeight={theme.lineHeight.x20}
-        marginBottom={theme.spaces.x6}
-        width="auto">
-        Aliquip adipisicing velit dolor quis labore adipisicing minim ad commodo id mollit laboris aliqua.
+        Grup Kur
       </AppText>
       <AppInput
-        error={errors.username}
+        error={errors.groupname}
         control={control}
         rules={{required: true, minLength: 6}}
-        name="username"
+        name="groupname"
         autoCapitalize="none"
-        label={t('_formElement.username')}
+        label={t('_formElement.groupname')}
         placeholder="Nebukadnezar"
         isUsernameInput={true}
       />

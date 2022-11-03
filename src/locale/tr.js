@@ -9,6 +9,7 @@ export default {
     email: 'E-posta',
     password: 'Şifre',
     username: 'Kullanıcı Adı',
+    groupname: 'Grup Adı',
   },
   _welcomeScreen: {
     getStarted: 'Şimdi Başla',

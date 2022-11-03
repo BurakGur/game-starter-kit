@@ -46,6 +46,7 @@ const StartGameScreen = ({navigation}) => {
         }
         title="Oyuna Başla"
       />
+      <AppButton title="Puanlama" onPress={() => navigation.navigate('GroupRanking')}></AppButton>
     </GameLayout>
   );
 };
