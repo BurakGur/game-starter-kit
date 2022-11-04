@@ -8,6 +8,7 @@ import {BannerAd, BannerAdSize} from 'react-native-google-mobile-ads';
 import {adsConfig, bannerId} from '@utils/ads';
 
 const PlayGameScreen = ({route, navigation}) => {
+  console.log(route);
   const [score, setScore] = useState(0);
 
   const move = () => {

@@ -41,7 +41,7 @@ const StartGameScreen = ({navigation}) => {
         onPress={() =>
           navigation.reset({
             index: 0,
-            routes: [{name: 'PlayGame'}],
+            routes: [{name: 'PlayGame', params: 'hello'}],
           })
         }
         title="Oyuna Başla"

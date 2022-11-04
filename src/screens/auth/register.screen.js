@@ -88,9 +88,6 @@ const LoginScreen = ({navigation}) => {
         placeholder="Nebukadnezar"
         isUsernameInput={true}
       />
-      <AppBox justifyContent="flex-end" alignItems="flex-end" marginBottom={theme.spaces.x14}>
-        <AppText>{t('_loginScreen.forgotPassword')}</AppText>
-      </AppBox>
       <AppButton onPress={handleSubmit(onSubmit)} title="Giriş Yap" />
     </AuthLayout>
   );

@@ -29,19 +29,19 @@ const LoginScreen = ({navigation}) => {
       .where('groupname', '==', data.groupname)
       .get()
       .then(async snapshot => {
-        console.log('helooo', snapshot);
         if (snapshot.empty) {
           const groupData = {
             groupname: data.groupname,
-            user: user.username,
+            creator: user.username,
             createdDate: new Date(),
+            users: [user.username],
           };
           collection('Groups')
             .add(groupData)
             .then(async () => {
               navigation.reset({
                 index: 0,
-                routes: [{name: 'GroupSettings'}],
+                routes: [{name: 'GroupSettings', groupname: data.groupname}],
               });
             });
         } else {
