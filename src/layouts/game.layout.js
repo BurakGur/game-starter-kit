@@ -5,5 +5,5 @@ export const GameLayout = styled(ScrollView)`
   padding: ${({theme}) => theme.layout.padding};
   width: 100%;
   background-color: ${({theme}) => theme.colors.bg_01};
-  height: 90%;
+  min-height: 90%;
 `;

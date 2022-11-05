@@ -11,6 +11,7 @@ import {Alert, Platform, StatusBar} from 'react-native';
 import {themeState} from '@store/selectors';
 import {collection} from '@utils/firebase';
 import {redis} from '@utils/redis';
+import {usernameFormatter} from '@/utils/username';
 
 const LoginScreen = ({navigation}) => {
   const user = useRecoilValue(userState);
@@ -24,24 +25,31 @@ const LoginScreen = ({navigation}) => {
   } = useForm({});
 
   const onSubmit = async data => {
+    const groupName = usernameFormatter(data.groupName);
     console.log('data', data);
     collection('Groups')
-      .where('groupname', '==', data.groupname)
+      .where('groupName', '==', groupName)
       .get()
       .then(async snapshot => {
         if (snapshot.empty) {
           const groupData = {
-            groupname: data.groupname,
+            groupNick: data.groupName,
+            groupName: groupName,
             creator: user.username,
             createdDate: new Date(),
-            users: [user.username],
+            users: [
+              {
+                isActive: true,
+                username: user.username,
+              },
+            ],
           };
           collection('Groups')
             .add(groupData)
             .then(async () => {
               navigation.reset({
                 index: 0,
-                routes: [{name: 'GroupSettings', groupname: data.groupname}],
+                routes: [{name: 'GroupSettings', groupName: groupName}],
               });
             });
         } else {
@@ -65,12 +73,12 @@ const LoginScreen = ({navigation}) => {
         Grup Kur
       </AppText>
       <AppInput
-        error={errors.groupname}
+        error={errors.groupName}
         control={control}
         rules={{required: true, minLength: 6}}
-        name="groupname"
+        name="groupName"
         autoCapitalize="none"
-        label={t('_formElement.groupname')}
+        label={t('_formElement.groupName')}
         placeholder="Nebukadnezar"
         isUsernameInput={true}
       />

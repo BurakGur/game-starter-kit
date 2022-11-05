@@ -4,54 +4,57 @@ import {GameLayout} from '@/layouts';
 import {collection} from '@/utils/firebase';
 import {useRecoilValue} from 'recoil';
 import {userState} from '@/store/atoms';
+import {redis} from '@/utils/redis';
 
 const GroupRanking = ({navigation}) => {
   const user = useRecoilValue(userState);
   const [groups, setGroups] = useState([]);
 
-  const setGroupScore = group => {
+  const setGroupScore = async group => {
     const groupsWithScore = {...group};
-    groupsWithScore.users.forEach((groupUser, index) => {
-      console.log(index, groupUser);
-      if (groupUser === user.username) {
-        groupsWithScore.users[index] = {
-          username: groupUser,
-          score: user.score,
-        };
+    groupsWithScore.users.forEach(async (groupUser, index) => {
+      let score = 0;
+      if (groupUser.username === user.username) {
+        score = user.score;
+      } else {
+        async () => (score = await redis.get(groupUser.username));
       }
+      groupsWithScore.users[index].score = score;
     });
+
+    groupsWithScore.users.sort((a, b) => a.score < b.score);
+
     return groupsWithScore;
   };
 
   useEffect(() => {
     collection('Groups')
-      .where('users', 'array-contains', user.username)
+      .where('users', 'array-contains', {
+        username: user.username,
+        isActive: true,
+      })
       .get()
-      .then(snapshot => {
-        const data = [];
-        snapshot.forEach(element => {
+      .then(async snapshot => {
+        snapshot.forEach(async element => {
           const group = element.data();
-          const groupWithScore = setGroupScore(group);
-          data.push(groupWithScore);
+          const groupWithScore = await setGroupScore(group);
+          setGroups(oldGroups => [...oldGroups, groupWithScore]);
         });
-        console.log('data', data);
-        setGroups(data);
       });
-    console.log('groups', groups);
   }, []);
 
   return (
     <GameLayout>
       <AppBox flexDirection="column">
-        {groups.map(group => (
-          <>
-            <AppText>{group.groupname}</AppText>
-            {group.users.map(groupUser => (
-              <AppText>
+        {groups.map((group, index) => (
+          <AppBox key={index} flexDirection="column">
+            <AppText>Group: {group.groupNick}</AppText>
+            {group?.users?.map(groupUser => (
+              <AppText key={groupUser.username}>
                 {groupUser.username}: {groupUser.score}
               </AppText>
             ))}
-          </>
+          </AppBox>
         ))}
         <AppButton title="Grup Kur" onPress={() => navigation.navigate('CreateGroup')}></AppButton>
       </AppBox>
