@@ -49,6 +49,14 @@ const GroupRanking = ({navigation}) => {
         {groups.map((group, index) => (
           <AppBox key={index} flexDirection="column">
             <AppText>Group: {group.groupNick}</AppText>
+            <AppButton
+              title="Grup Ayarları"
+              onPress={() =>
+                navigation.navigate('GroupSettings', {
+                  groupName: group.groupName,
+                })
+              }
+            />
             {group?.users?.map(groupUser => (
               <AppText key={groupUser.username}>
                 {groupUser.username}: {groupUser.score}
