@@ -4,10 +4,15 @@ import {GameLayout} from '@/layouts';
 import {useForm} from 'react-hook-form';
 import t from '@/locale';
 import {collection} from '@/utils/firebase';
+import {useRecoilValue} from 'recoil';
+import {userState} from '@/store/atoms';
+import {Alert} from 'react-native';
 
 const GroupRanking = ({route, navigation}) => {
   const groupName = route.params.groupName;
+  const user = useRecoilValue(userState);
   const [group, setGroup] = useState(null);
+  const [docId, setDocId] = useState();
   const {
     control,
     handleSubmit,
@@ -21,48 +26,53 @@ const GroupRanking = ({route, navigation}) => {
       .get()
       .then(async snapshot => {
         snapshot.forEach(async element => {
+          setDocId(element.id);
           setGroup(element.data());
         });
       });
   }, []);
 
   const onSubmit = async data => {
-    collection('Users')
-      .where('username', '==', data.username)
-      .get()
-      .then(async snapshot => {
-        if (snapshot.empty) {
-          await redis.set(data.username, 0);
-          const user = {
-            username: data.username,
-            os: Platform.OS,
-            version: Platform.Version,
-            createdDate: new Date(),
-            score: 0,
-          };
-          collection('Users')
-            .add(user)
-            .then(async () => {
-              setUser(user);
-              await saveUser(user);
-              navigation.reset({
-                index: 0,
-                routes: [{name: 'StartGame'}],
+    const username = data.username;
+    if (username !== user.username) {
+      const checkInGroup = group.users.find(groupUser => groupUser.username === username);
+      if (!checkInGroup) {
+        collection('Users')
+          .where('username', '==', data.username)
+          .get()
+          .then(async snapshot => {
+            if (!snapshot.empty) {
+              const groupWithNewUser = {...group};
+              groupWithNewUser.users.push({
+                username: data.username,
+                isActive: false,
               });
-            });
-        } else {
-          Alert.alert('Geçersiz Kullanıcı Adı', 'Bu kullanıcı adı başka bir kullanıcı tarafından kullanılmaktadır.', [
-            {text: 'Tamam', onPress: () => console.log('OK Pressed')},
-          ]);
-        }
-      });
+              setGroup(groupWithNewUser);
+              reset();
+              collection('Groups').doc(docId).update(groupWithNewUser);
+            } else {
+              Alert.alert('Geçersiz Kullanıcı Adı', 'Böyle bir kullanıcı adı kullanılmıyor', [
+                {text: 'Tamam', onPress: () => console.log('OK Pressed')},
+              ]);
+            }
+          });
+      } else {
+        Alert.alert('Ee bu var', 'Kardeş kör müsün eklemişsiniz zaten', [
+          {text: 'Yine yakalandım', onPress: () => console.log('OK Pressed')},
+        ]);
+      }
+    } else {
+      Alert.alert('Güzel deneme', 'Aaa bu sen değil misin ya?', [
+        {text: ' Yakalandım', onPress: () => console.log('OK Pressed')},
+      ]);
+    }
   };
 
   return (
     <GameLayout>
-      <AppIf condition={group}>
+      {group ? (
         <AppBox flexDirection="column">
-          <AppText>Grup İsmi: {group.groupNick}</AppText>
+          <AppText>Grup İsmi: {group.groupName}</AppText>
           {group.users.length <= 6 ? (
             <AppInput
               error={errors.username}
@@ -84,7 +94,9 @@ const GroupRanking = ({route, navigation}) => {
             </AppText>
           ))}
         </AppBox>
-      </AppIf>
+      ) : (
+        <></>
+      )}
     </GameLayout>
   );
 };
