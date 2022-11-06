@@ -13,7 +13,7 @@ import {Text, TouchableOpacity} from 'react-native';
 import {MyProfile} from '@/screens/profile';
 import {BarsSort, ChevronLeft, MagnifyingGlass} from '@/icons';
 import {themeState} from '@/store/selectors';
-import {GroupRanking, CreateGroup, GroupSettings} from '@/screens/group';
+import {GroupRanking, CreateGroup, GroupSettings, GroupInvites} from '@/screens/group';
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +90,7 @@ const RouteNavigation = () => {
             <Stack.Screen name="GroupRanking" component={GroupRanking} />
             <Stack.Screen name="CreateGroup" component={CreateGroup} />
             <Stack.Screen name="GroupSettings" component={GroupSettings} />
+            <Stack.Screen name="GroupInvites" component={GroupInvites} />
             <Stack.Screen
               name="FinishGame"
               component={FinishGame}

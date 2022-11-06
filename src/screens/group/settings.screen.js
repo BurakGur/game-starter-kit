@@ -8,7 +8,7 @@ import {useRecoilValue} from 'recoil';
 import {userState} from '@/store/atoms';
 import {Alert} from 'react-native';
 
-const GroupRanking = ({route, navigation}) => {
+const GroupSettings = ({route, navigation}) => {
   const groupName = route.params.groupName;
   const user = useRecoilValue(userState);
   const [group, setGroup] = useState(null);
@@ -112,4 +112,4 @@ const GroupRanking = ({route, navigation}) => {
   );
 };
 
-export default GroupRanking;
+export default GroupSettings;
