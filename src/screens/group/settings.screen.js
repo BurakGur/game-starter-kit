@@ -68,6 +68,17 @@ const GroupRanking = ({route, navigation}) => {
     }
   };
 
+  const removeUser = () => {
+    const groupWithoutUser = {...group};
+    const userIndex = groupWithoutUser.users.findIndex(groupUser => groupUser.username === user.username);
+    groupWithoutUser.users.splice(userIndex, 1);
+    collection('Groups').doc(docId).update(groupWithoutUser);
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'GroupRanking'}],
+    });
+  };
+
   return (
     <GameLayout>
       {group ? (
@@ -87,7 +98,7 @@ const GroupRanking = ({route, navigation}) => {
             <AppText>Daha fazla gruba kişi ekleyemezsiniz.</AppText>
           )}
           <AppButton onPress={handleSubmit(onSubmit)} title="Kişi Ekle" />
-          <AppButton title="Kendini Çıkar" onPress={() => navigation.navigate('CreateGroup')}></AppButton>
+          <AppButton title="Kendini Çıkar" onPress={removeUser}></AppButton>
           {group.users.map(groupUser => (
             <AppText key={groupUser.username}>
               {groupUser.username} - {groupUser.isActive ? 'Aktif' : 'Onay Bekleniyor'}
